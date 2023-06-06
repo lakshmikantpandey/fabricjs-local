@@ -1,0 +1,122 @@
+import React, { useEffect, useRef, useState } from "react";
+import { fabric } from "fabric";
+import frame1 from '../assets/images/frame1.png';
+import { FabricJSCanvas } from "fabricjs-react";
+
+const Canvas = (props) => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const editor = new fabric.Canvas(canvasRef.current, {
+      backgroundColor: 'lightblue',
+      height: 400,
+      width: 400,
+      top: 50,
+      left: 200,
+      border: '1px solid black'
+    });
+    addImageToCanvas(editor);
+    addFrameToCanvas();
+    // addTextToCanvas(text);
+    editor.renderAll();
+  }, []);
+
+  // editor.setOverlayImage(frame1, editor.renderAll.bind(editor));
+
+  /////// Backup ///////
+
+  // const addImageToCanvas = (canvas) => {
+  //   fabric.Image.fromURL(
+  //     "http://image.ibb.co/dhk6V7/center.jpg",
+  //     (img) => {
+  //       img.set({
+  //         left: 0,
+  //         top: 0,
+  //         _controlsVisibility: false
+  //       });
+  //       img.scaleToWidth(canvas.width);
+  //       canvas.add(img);
+  //       canvas.setOverlayImage(frame1, canvas.renderAll.bind(canvas));
+  //       // canvas.renderAll();
+  //     }
+  //   );
+  // };
+
+  const addImageToCanvas = (canvas) => {
+    const posterImage = props.data[0];
+    fabric.Image.fromURL(posterImage.image, (img) => {
+      img.set({
+        left: 0,
+        top: 0,
+        selectable: false
+      });
+      img.scaleToWidth(canvas.width);
+      canvas.add(img);
+      // canvas.setOverlayImage(frame1, canvas.renderAll.bind(canvas));
+      canvas.renderAll();
+    }
+    );
+  };
+  
+
+  const addFrameToCanvas = (canvas) => {
+    const frameOverlay = props.data[0];
+    fabric.Image.fromURL(frameOverlay.path, (frame) => {
+      frame.set({
+        left: 0,
+        top: 0,
+      });
+      frame.scaleToWidth(canvas.width);
+      canvas.add(frame);
+      canvas.renderAll();
+    })
+  }
+
+
+  const addTextToCanvas = (canvas) => {
+    const text = fabric.Text('Test Canvas Text', {
+      left: 300,
+      top: 100,
+      color: 'black'
+    });
+    canvas.add(text)
+  }
+
+
+// const addText = (canvas) => {
+  //   const text = props.jsonData[0];
+  //   var textPath = new fabric.IText(text.brandName.name, {
+  //     top: 350,
+  //     left: 0,
+  //     fontSize: 20,
+  //     charSpacing: -50,
+  //     editable: true
+  //   });
+  //   var textPath2 = new fabric.Text(text.email.email, {
+  //     top: 322,
+  //     left: 0,
+  //     fontSize: 20,
+  //     charSpacing: -50,
+  //     editable: true
+  //   });
+  //   var textPath3 = new fabric.Text(text.mobile.mobile, {
+  //     top: 350,
+  //     left: 220,
+  //     fontSize: 20,
+  //     charSpacing: -50,
+  //     editable: true
+  //   });
+  //   var textPath4 = new fabric.Text(text.address.address, {
+  //     top: 377,
+  //     left: 0,
+  //     fontSize: 20,
+  //     // backgroundColor: 'white',
+  //     charSpacing: -50,
+  //     editable: true
+  //   });
+  //   canvas.add(textPath, textPath2, textPath3, textPath4)
+  // };
+  return <canvas className="canvas" ref={canvasRef} />;
+};
+
+export default Canvas;

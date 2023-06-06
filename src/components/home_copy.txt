@@ -1,0 +1,136 @@
+import React, { useState } from "react";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
+import Canvas from "./Canvas";
+import frame1 from '../assets/images/frame1.png';
+import frame2 from '../assets/images/frame2.png';
+import frame3 from '../assets/images/frame3.png';
+import frame4 from '../assets/images/frame4.png';
+
+const jsonData = [
+    {
+        id: 'frame1',
+        path: frame1,
+        position: 'sideUpperRight'
+    },
+    {
+        id: 'frame2',
+        path: frame2,
+        position: 'sideUpperLeft'
+    },
+    {
+        id: 'frame3',
+        path: frame3,
+        position: 'sideBottomLeft'
+    },
+    {
+        id: 'frame4',
+        path: frame4,
+        position: 'sideBottomRight'
+    }
+]
+
+const Home = () => {
+    const [isDivVisible, setIsDivVisible] = useState(true);
+
+    function handleCloseClick() {
+        setIsDivVisible(false);
+    }
+
+    const [canvas, setCanvas] = useState(
+        new fabric.Canvas('canvas', {
+            height: 500,
+            width: 500,
+            marginLeft: 500,
+            backgroundColor: 'lightblue',
+            border: '1px solid black'
+        })
+    );
+
+    const frameMap = new Map(jsonData.map(data => [data.id, data]))
+    // console.log(frameMap.get(frame1));
+
+    // console.log(canvas);
+
+    const addImageFunction = () => {
+        window.fabric.Image.fromURL(`http://image.ibb.co/dhk6V7/center.jpg`, (img) => {
+            img.set({
+                left: 0,
+                top: 0,
+            });
+            img.scaleToWidth(canvas.width / 2);
+            canvas.add(img);
+            canvas.renderAll();
+        })
+    }
+
+    function addFrameToCanvas(id) {
+        console.log(id);
+        const canvas = canvas;
+
+        const addCanvas = new fabric.Canvas('canvas', {
+            height: 500,
+            width: 500,
+            marginLeft: 500,
+            backgroundColor: 'lightblue',
+            border: '1px solid black'
+        })
+
+        canvas.add(addCanvas);
+        canvas.setActiveObject(addCanvas);
+        // selectObject(canvas);
+        canvas.renderAll();
+    }
+
+    return (
+        <>
+            <Header />
+            <Sidebar />
+            {isDivVisible && (
+                <div id="toolpanel_editor" className="toolpanel toolpanel_editor visible minimized ">
+                    <div onClick={handleCloseClick} className="minimizer">
+                        <svg id="Group_3757" data-name="Group 3757" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                            <rect id="Rectangle_992" data-name="Rectangle 992" width="1.553" height="18.246" transform="translate(12.902 0) rotate(45)"></rect>
+                            <rect id="Rectangle_993" data-name="Rectangle 993" width="1.553" height="18.246" transform="translate(14 12.902) rotate(135)"></rect>
+                        </svg>
+                    </div>
+                    <div className="holder sbar">
+                        <div className="title_sticky">
+                            <p className="title">Select any frame</p>
+                        </div>
+
+                        <div className="backgroundImages">
+                            <div className="list_of_backgroundImage list_of_frameImage">
+                                <div onClick={(e) => addFrameToCanvas(frameMap.get(e.target.id))} className="backgroundImage_inner" id="1">
+                                    <div className="button">
+                                        <img id="frame1" className="backgroundImage_img" alt="" src={frame1} />
+                                    </div>
+                                </div>
+                                <div onClick={addImageFunction} className="backgroundImage_inner">
+                                    <div className="button">
+                                        <img id="frame2" className="backgroundImage_img" alt="" src={frame2} />
+                                    </div>
+                                </div>
+                                <div className="backgroundImage_inner">
+                                    <div className="button">
+                                        <img id="frame3" className="backgroundImage_img" alt="" src={frame3} />
+                                    </div>
+                                </div>
+                                <div className="backgroundImage_inner">
+                                    <div className="button">
+                                        <img id="frame4" className="backgroundImage_img" alt="" src={frame4} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            <Canvas canvas={canvas} />
+        </>
+    )
+
+}
+
+
+export default Home;

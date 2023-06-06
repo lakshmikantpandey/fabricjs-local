@@ -1,0 +1,19 @@
+import React, { useState, useEffect } from "react";
+import { fabric } from "fabric";
+
+const Canvas = (props) => {
+console.log(props);
+  
+  useEffect(() => {
+    props.canvas.renderAll();
+  }, []);
+ 
+
+  return (
+    <div>
+      <canvas className="canvas" id="canvas" />
+    </div>
+  );
+}
+
+export default Canvas;
